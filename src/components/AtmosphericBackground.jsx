@@ -44,32 +44,29 @@ export default function AtmosphericBackground({
       }
 
       update() {
-        // --- Idle Drift ---
-        // We move the "base" position slowly so the particle's home is always shifting
+        // drift
         this.baseX += this.vx;
         this.baseY += this.vy;
 
-        // Screen wrap (so particles don't disappear forever)
+        // screen wrap but probably causes the fast particles problem
         if (this.baseX > canvas.width) this.baseX = 0;
         if (this.baseX < 0) this.baseX = canvas.width;
         if (this.baseY > canvas.height) this.baseY = 0;
         if (this.baseY < 0) this.baseY = canvas.height;
 
-        // --- Mouse Interaction ---
+        // interacts with mouse
         let dx = mouse.current.x - this.x;
         let dy = mouse.current.y - this.y;
         let distance = Math.sqrt(dx * dx + dy * dy);
         
         if (distance < mouse.current.radius) {
           const force = (mouse.current.radius - distance) / mouse.current.radius;
-          // Use the strength prop here
           const directionX = (dx / distance) * force * this.density * strength;
           const directionY = (dy / distance) * force * this.density * strength;
           
           this.x -= directionX;
           this.y -= directionY;
         } else {
-          // Return to drifting base position
           if (this.x !== this.baseX) {
             let dx = this.x - this.baseX;
             this.x -= dx / 20;

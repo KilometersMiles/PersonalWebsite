@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
 import About from './pages/About';
+import Skills from './pages/Skills';
 import MagneticButton from './components/MagneticButton';
 import NavBar from './components/NavBar';
 import AtmosphericBackground from './components/AtmosphericBackground';
@@ -24,6 +25,7 @@ export default function App() {
     switch (page) {
       case 'projects': return <Projects />;
       case 'about': return <About />;
+      case 'skills': return <Skills />;
       default: return <Home />;
     }
   };

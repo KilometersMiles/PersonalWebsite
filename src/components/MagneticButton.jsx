@@ -8,8 +8,7 @@ const MagneticButton = ({ children, onClick, active }) => {
   const handleMouseMove = (e) => {
     const { clientX, clientY, currentTarget } = e;
     const { left, top, width, height } = currentTarget.getBoundingClientRect();
-    // 0.15 is a nice middle ground for magnetic strength
-    const x = (clientX - (left + width / 2)) * 0.15;
+    const x = (clientX - (left + width / 2)) * 0.15; // controls stength of pull
     const y = (clientY - (top + height / 2)) * 0.15;
     setOffset({ x, y });
   };
@@ -20,12 +19,10 @@ const MagneticButton = ({ children, onClick, active }) => {
     setIsHovered(false);
   };
 
-  // The electric blue color from your theme or a brighter variant
   const electricBlue = "#7dd3fc"; 
 
   return (
     <>
-      {/* 1. THE FILTER DEFINITION (Hidden) */}
       <svg style={{ position: 'absolute', width: 0, height: 0, pointerEvents: 'none' }}>
         <filter id="electric-glow">
           <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" seed="1">
@@ -35,7 +32,6 @@ const MagneticButton = ({ children, onClick, active }) => {
         </filter>
       </svg>
 
-      {/* 2. THE BUTTON */}
       <button
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
@@ -61,11 +57,11 @@ const MagneticButton = ({ children, onClick, active }) => {
       >
         <span style={{ position: 'relative', zIndex: 2 }}>{children}</span>
 
-        {/* 3. THE ELECTRIC BOLT LAYER */}
+        {/* electric layer */}
         <div
           style={{
             position: 'absolute',
-            inset: '-1px', // Sits perfectly over the border
+            inset: '-1px',
             borderRadius: '12px',
             border: `2px solid ${electricBlue}`,
             pointerEvents: 'none',

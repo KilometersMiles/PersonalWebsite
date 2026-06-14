@@ -1,7 +1,6 @@
-import React from 'react';
-import NavCard from '../components/NavCard'; // Assuming you kept NavCard logic
+import React, { useEffect, useRef } from 'react';
+import NavCard from '../components/NavCard'; 
 import NavImage from '../components/NavImage';
-import ScrollRevealItem from '../components/ScrollRevealItem'; // Logic from original useEffect
 import { theme } from '../constants/theme';
 
 //import images
@@ -13,31 +12,35 @@ import Flowers from '../assets/Wildflower-meadow-garden 2.png';
 import WordArtRosty from '../assets/WordArtRosty.png';
 
 const projects = [
-  { title: 'Commercial Art Projects', desc: '', type: 'card' },
-  { title: 'Adrian', desc: 'A stunning remake of humanity-saving planet', type: 'image', url: Adrian },
-  { title: 'PolySunset', desc: 'Geometric sunset and friend', type: 'image', url: FlashPoly },
-  { title: 'WhipWeave', desc: 'A classic painting turned into a basket', type: 'image', url: WhipWeave },
-  { title: 'Chopin', desc: 'Colorized musical master', type: 'image', url: Chopin },
-  { title: 'Flowers', desc: 'A pop of color to a field', type: 'image', url: Flowers },
-  { title: 'Rostropovitch', desc: 'Words to describe a master', type: 'image', url: WordArtRosty },
+  { title: 'FTC Path Follower', desc: 'A unique path follower for FTC robots, using LQR control to quicly and accurately follow trajectories. Visualizer and optimizer in progress.', url: 'https://previews.123rf.com/images/kchung/kchung1610/kchung161001354/64508202-test-written-by-hand-hand-writing-on-transparent-board-photo.avif', type: 'image'},
+  { title: 'Portfolio Site', desc: 'This site! Built with React and custom CSS, featuring a dynamic background and eletric buttons.', url: '', type: 'image'},
+  { title: 'Aluminum Falcons Website', desc: 'Aluminum Falcons team site. Check it out at aluminumfalcons.com', url: '', type: 'image'},
+
 ];
 
 export default function Projects() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6rem', padding: '5vh 0 20vh 0' }}>
-      {projects.map((proj, i) => (
-        <div>
-        {/* <ScrollRevealItem key={proj.title} delay={i * 0.1}> */}
-          {proj.type === 'card' ? (
-            <div style={{ padding: '2rem', borderRadius: '16px', background: theme.glass, border: `1px solid ${theme.glassBorder}`, color: theme.text }}>
-              <h3>{proj.title}</h3>
-            </div>
-          ) : (
-            <NavImage title={proj.title} description={proj.desc} imageUrl={proj.url} />
-          )}
-        {/* </ScrollRevealItem> */}
-        </div>
-      ))}
+    <div style={{
+      textAlign: 'center',
+      margin: '0 auto',
+      padding: '2rem',
+    }}>
+      <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1.5rem', color: theme.primary}}>PROJECTS</h2>
+      <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: '3rem', padding: '5vh 0 20vh 0' }}>
+        {projects.map((proj, i) => (
+          <div key={proj.title}>
+          {/* <ScrollRevealItem key={proj.title} delay={i * 0.1}> */}
+            {proj.type === 'card' ? (
+              <div style={{ padding: '2rem', borderRadius: '16px', background: theme.glass, border: `1px solid ${theme.glassBorder}`, color: theme.text }}>
+                <h3>{proj.title}</h3>
+              </div>
+            ) : (
+              <NavImage title={proj.title} description={proj.desc} imageUrl={proj.url} />
+            )}
+          {/* </ScrollRevealItem> */}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

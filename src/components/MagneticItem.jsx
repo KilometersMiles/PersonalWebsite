@@ -6,7 +6,7 @@ export default function MagneticItem({ children }) {
   const handleMouseMove = (e) => {
     const { clientX, clientY, currentTarget } = e;
     const { left, top, width, height } = currentTarget.getBoundingClientRect();
-    const x = (clientX - (left + width / 2)) * 0.05; // Subtler strength than the button
+    const x = (clientX - (left + width / 2)) * 0.05; // less strength than the button
     const y = (clientY - (top + height / 2)) * 0.05;
     setOffset({ x, y });
   };

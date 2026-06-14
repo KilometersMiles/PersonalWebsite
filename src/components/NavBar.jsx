@@ -12,7 +12,7 @@ export default function Navbar({ setPage, currentPage }) {
       position: 'relative',
       zIndex: 10,
     }}>
-        {/* Left side can be a logo or initials */}
+        {/* Add a logo later probably */}
       {/* <div 
         onClick={() => setPage('home')}
         style={{ color: theme.primary, fontWeight: 'bold', cursor: 'pointer', fontSize: '1.2rem' }}
@@ -22,7 +22,7 @@ export default function Navbar({ setPage, currentPage }) {
         <div>  </div>
 
       <div style={{ display: 'flex', gap: '1rem' }}>
-        {['home', 'projects', 'about'].map((item) => (
+        {['home', 'projects', 'skills', 'about'].map((item) => (
           <MagneticButton 
             key={item} 
             onClick={() => setPage(item)} 
