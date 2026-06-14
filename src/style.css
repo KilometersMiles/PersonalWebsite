@@ -142,3 +142,12 @@ html {
 .electric-btn:active {
   transform: scale(0.98);
 }
+li::marker {
+  font-size: 1.7rem; 
+  color: #9cd3ed;   
+}
+.skill-item:hover {
+  color: #fff;
+  transform: translateX(4px);
+  transition: all 0.2s ease;
+}
