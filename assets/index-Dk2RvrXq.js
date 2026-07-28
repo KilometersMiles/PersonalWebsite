@@ -4204,13 +4204,25 @@ No matching component was found for:
         mask = 1.0 - smoothstep(dynamicRadius - u_shapeSoftness, dynamicRadius + u_shapeSoftness, dist);
       } 
       else if (u_shapeType == 4) { 
-        // TEXTURE / LOGO MASK
-        // Sample texture alpha or brightness
-        vec4 texColor = texture2D(u_shapeTexture, uv);
-        float rawAlpha = max(texColor.a, (texColor.r + texColor.g + texColor.b) / 3.0);
-        // Smoothly expand/feather boundary
-        mask = smoothstep(0.1 - u_shapeSoftness, 0.5 + u_shapeSoftness, rawAlpha);
-      }
+        // 1. Center and aspect-correct the texture UVs
+        vec2 texUv = (uv - 0.5) * vec2(u_resolution.x / u_resolution.y, 1.0) / u_shapeRadius + 0.5;
+
+        // 2. Check if UVs are within [0, 1] bounds (prevents edge-smearing/tiling)
+        if (texUv.x < 0.0 || texUv.x > 1.0 || texUv.y < 0.0 || texUv.y > 1.0) {
+          mask = 0.0;
+        } else {
+          vec4 texColor = texture2D(u_shapeTexture, texUv);
+          
+          // 3. For black pixels on transparent background:
+          // Alpha channel (texColor.a) defines shape boundary
+          float alpha = texColor.a;
+
+          // If your PNG uses black RGB instead of true Alpha, invert RGB brightness:
+          // float alpha = 1.0 - ((texColor.r + texColor.g + texColor.b) / 3.0);
+
+          mask = smoothstep(0.1 - u_shapeSoftness, 0.5 + u_shapeSoftness, alpha);
+        }
+    }
 
       return clamp(mask, 0.0, 1.0);
     }
@@ -4268,4 +4280,4 @@ No matching component was found for:
 
       gl_FragColor = vec4(highlightColor, 1.0);
     }
-  `)});var gy=({shape:e=`none`,textureUrl:t=null,radius:n=.25,softness:r=.2,expand:i=.08})=>{let a=(0,v.useRef)(),{size:o,mouse:s}=L_(),c=(0,v.useRef)(0),l=(0,v.useMemo)(()=>Math.random()*100,[]),u=t?uy(t):null,d=(0,v.useRef)(Array(py).fill(null).map(()=>({pos:new U(.5,.5),vel:new U(0,0),age:1}))),f=(0,v.useRef)({x:.5,y:.5,time:performance.now()});return R_(t=>{if(!a.current)return;let l=performance.now(),p=Math.max((l-f.current.time)/1e3,.001),m=(s.x+1)/2,h=(s.y+1)/2,g=m-f.current.x,_=h-f.current.y,v=Math.sqrt(g*g+_*_),y=d.current;for(let e=0;e<py;e++)y[e].age<1&&(y[e].age=Math.min(y[e].age+p*.1,1),y[e].pos.addScaledVector(y[e].vel,p*1),y[e].vel.multiplyScalar(.998));if(v>.009){let e=c.current;c.current=(c.current+1)%py;let t=Math.max(v/p,.001),n=g/v,r=_/v,i=.02+Math.min(t*.03,.15);y[e]={pos:new U(m,h),vel:new U(n*i,r*i),age:0}}f.current={x:m,y:h,time:l},a.current.u_time=t.clock.getElapsedTime(),a.current.u_resolution.set(o.width,o.height),a.current.u_shapeType=my[e]??0,a.current.u_shapeRadius=n,a.current.u_shapeSoftness=r,a.current.u_shapeExpand=i,u&&(a.current.u_shapeTexture=u);for(let e=0;e<py;e++)a.current.u_trailPos[e].copy(y[e].pos),a.current.u_trailVel[e].copy(y[e].vel),a.current.u_trailAge[e]=y[e].age}),(0,S.jsx)(fy,{args:[2,2],frustumCulled:!1,children:(0,S.jsx)(`glowyCloudMaterial`,{ref:a,u_seed:l,transparent:!0},l)})},_y=({shape:e=`line`,textureUrl:t=null,radius:n=.25,softness:r=.15,expand:i=.05,style:a,...o})=>(0,S.jsx)(oy,{style:{width:`100vw`,height:`100vh`,position:`absolute`,top:0,left:0,zIndex:-1,...a},orthographic:!0,camera:{position:[0,0,1],zoom:1},dpr:Math.min(window.devicePixelRatio,2),...o,children:(0,S.jsx)(v.Suspense,{fallback:null,children:(0,S.jsx)(gy,{shape:e,textureUrl:t,radius:n,softness:r,expand:i})})});function vy(){let[e,t]=(0,v.useState)(`home`);return(0,v.useEffect)(()=>{let e=e=>{document.documentElement.style.setProperty(`--mouse-x`,`${e.clientX}px`),document.documentElement.style.setProperty(`--mouse-y`,`${e.clientY}px`)};return window.addEventListener(`mousemove`,e),()=>window.removeEventListener(`mousemove`,e)},[]),(0,S.jsxs)(`div`,{style:{backgroundColor:b.bg,color:b.text,minHeight:`100vh`,fontFamily:`Inter, sans-serif`},children:[(0,S.jsx)(ee,{setPage:t,currentPage:e}),(0,S.jsx)(_y,{style:{zIndex:0}}),(0,S.jsx)(`main`,{style:{position:`relative`,zIndex:5,animation:`fadeInUp 0.5s ease-out forwards`},children:(()=>{switch(e){case`projects`:return(0,S.jsx)(D,{});case`about`:return(0,S.jsx)(O,{});case`skills`:return(0,S.jsx)(k,{});default:return(0,S.jsx)(w,{})}})()},e)]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,S.jsx)(v.StrictMode,{children:(0,S.jsx)(vy,{})}));
+  `)});var gy=({shape:e=`none`,textureUrl:t=null,radius:n=.25,softness:r=.2,expand:i=.08})=>{let a=(0,v.useRef)(),{size:o,mouse:s}=L_(),c=(0,v.useRef)(0),l=(0,v.useMemo)(()=>Math.random()*100,[]),u=t?uy(t,e=>{e.colorSpace=``,e.wrapS=N,e.wrapT=N,e.needsUpdate=!0}):null,d=(0,v.useRef)(Array(py).fill(null).map(()=>({pos:new U(.5,.5),vel:new U(0,0),age:1}))),f=(0,v.useRef)({x:.5,y:.5,time:performance.now()});return R_(t=>{if(!a.current)return;let l=performance.now(),p=Math.max((l-f.current.time)/1e3,.001),m=(s.x+1)/2,h=(s.y+1)/2,g=m-f.current.x,_=h-f.current.y,v=Math.sqrt(g*g+_*_),y=d.current;for(let e=0;e<py;e++)y[e].age<1&&(y[e].age=Math.min(y[e].age+p*.1,1),y[e].pos.addScaledVector(y[e].vel,p*1),y[e].vel.multiplyScalar(.998));if(v>.009){let e=c.current;c.current=(c.current+1)%py;let t=Math.max(v/p,.001),n=g/v,r=_/v,i=.02+Math.min(t*.03,.15);y[e]={pos:new U(m,h),vel:new U(n*i,r*i),age:0}}f.current={x:m,y:h,time:l},a.current.u_time=t.clock.getElapsedTime(),a.current.u_resolution.set(o.width,o.height),a.current.u_shapeType=my[e]??0,a.current.u_shapeRadius=n,a.current.u_shapeSoftness=r,a.current.u_shapeExpand=i,u&&(a.current.u_shapeTexture=u);for(let e=0;e<py;e++)a.current.u_trailPos[e].copy(y[e].pos),a.current.u_trailVel[e].copy(y[e].vel),a.current.u_trailAge[e]=y[e].age}),(0,S.jsx)(fy,{args:[2,2],frustumCulled:!1,children:(0,S.jsx)(`glowyCloudMaterial`,{ref:a,u_seed:l,transparent:!0},l)})},_y=({shape:e=`line`,textureUrl:t=`/assets/image.png`,radius:n=.25,softness:r=.15,expand:i=.04,style:a,...o})=>(0,S.jsx)(oy,{style:{width:`100vw`,height:`100vh`,position:`absolute`,top:0,left:0,zIndex:-1,...a},orthographic:!0,camera:{position:[0,0,1],zoom:1},dpr:Math.min(window.devicePixelRatio,2),...o,children:(0,S.jsx)(v.Suspense,{fallback:null,children:(0,S.jsx)(gy,{shape:e,textureUrl:t,radius:n,softness:r,expand:i})})});function vy(){let[e,t]=(0,v.useState)(`home`);return(0,v.useEffect)(()=>{let e=e=>{document.documentElement.style.setProperty(`--mouse-x`,`${e.clientX}px`),document.documentElement.style.setProperty(`--mouse-y`,`${e.clientY}px`)};return window.addEventListener(`mousemove`,e),()=>window.removeEventListener(`mousemove`,e)},[]),(0,S.jsxs)(`div`,{style:{backgroundColor:b.bg,color:b.text,minHeight:`100vh`,fontFamily:`Inter, sans-serif`},children:[(0,S.jsx)(ee,{setPage:t,currentPage:e}),(0,S.jsx)(_y,{style:{zIndex:0}}),(0,S.jsx)(`main`,{style:{position:`relative`,zIndex:5,animation:`fadeInUp 0.5s ease-out forwards`},children:(()=>{switch(e){case`projects`:return(0,S.jsx)(D,{});case`about`:return(0,S.jsx)(O,{});case`skills`:return(0,S.jsx)(k,{});default:return(0,S.jsx)(w,{})}})()},e)]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,S.jsx)(v.StrictMode,{children:(0,S.jsx)(vy,{})}));
