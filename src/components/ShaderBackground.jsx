@@ -120,13 +120,25 @@ const GlowyCloudMaterial = shaderMaterial(
         mask = 1.0 - smoothstep(dynamicRadius - u_shapeSoftness, dynamicRadius + u_shapeSoftness, dist);
       } 
       else if (u_shapeType == 4) { 
-        // TEXTURE / LOGO MASK
-        // Sample texture alpha or brightness
-        vec4 texColor = texture2D(u_shapeTexture, uv);
-        float rawAlpha = max(texColor.a, (texColor.r + texColor.g + texColor.b) / 3.0);
-        // Smoothly expand/feather boundary
-        mask = smoothstep(0.1 - u_shapeSoftness, 0.5 + u_shapeSoftness, rawAlpha);
-      }
+        // 1. Center and aspect-correct the texture UVs
+        vec2 texUv = (uv - 0.5) * vec2(u_resolution.x / u_resolution.y, 1.0) / u_shapeRadius + 0.5;
+
+        // 2. Check if UVs are within [0, 1] bounds (prevents edge-smearing/tiling)
+        if (texUv.x < 0.0 || texUv.x > 1.0 || texUv.y < 0.0 || texUv.y > 1.0) {
+          mask = 0.0;
+        } else {
+          vec4 texColor = texture2D(u_shapeTexture, texUv);
+          
+          // 3. For black pixels on transparent background:
+          // Alpha channel (texColor.a) defines shape boundary
+          float alpha = texColor.a;
+
+          // If your PNG uses black RGB instead of true Alpha, invert RGB brightness:
+          // float alpha = 1.0 - ((texColor.r + texColor.g + texColor.b) / 3.0);
+
+          mask = smoothstep(0.1 - u_shapeSoftness, 0.5 + u_shapeSoftness, alpha);
+        }
+    }
 
       return clamp(mask, 0.0, 1.0);
     }
@@ -196,7 +208,12 @@ const ShaderScene = ({ shape = 'none', textureUrl = null, radius = 0.25, softnes
     const initialSeed = useMemo(() => Math.random() * 100.0, []);
 
     // Load custom texture/logo if provided
-    const loadedTexture = textureUrl ? useTexture(textureUrl) : null;
+    const loadedTexture = textureUrl ? useTexture(textureUrl, (tex) => {
+            tex.colorSpace = THREE.NoColorSpace; // Keeps raw Alpha values intact
+            tex.wrapS = THREE.ClampToEdgeWrapping;
+            tex.wrapT = THREE.ClampToEdgeWrapping;
+            tex.needsUpdate = true;
+        }) : null;
 
     const trailRef = useRef(
         Array(MAX_TRAIL).fill(null).map(() => ({
@@ -281,10 +298,10 @@ const ShaderScene = ({ shape = 'none', textureUrl = null, radius = 0.25, softnes
 
 const ShaderBackground = ({ 
     shape = 'line', // 'none' | 'circle' | 'ring' | 'line' | 'texture'
-    textureUrl = null, // Path to PNG logo (e.g. '/logo.png')
-    radius = 0.25,      // Size of shape
+    textureUrl = '/assets/image.png', // Path to PNG logo (e.g. '/logo.png')
+    radius = .25,      // Size of shape
     softness = 0.15,    // Boundary softness (higher = softer edges)
-    expand = 0.05,      // Natural expansion pulsate rate
+    expand = 0.04,      // Natural expansion pulsate rate
     style, 
     ...props 
 }) => {
