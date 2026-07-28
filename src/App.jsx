@@ -8,6 +8,7 @@ import NavBar from './components/NavBar';
 import AtmosphericBackground from './components/AtmosphericBackground';
 import { theme } from './constants/theme';
 import './style.css';
+import ShaderBackground from './components/ShaderBackground';
 
 export default function App() {
   const [page, setPage] = useState('home');
@@ -33,14 +34,14 @@ export default function App() {
   return (
     <div style={{ backgroundColor: theme.bg, color: theme.text, minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
       {/* Background Glow */}
-      <div style={{
-        position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0,
+      {/* <div style={{
+        position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 1,
         background: `radial-gradient(400px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(56, 189, 248, 0.12), transparent 80%)`
-      }} />
+      }} /> */}
 
       <NavBar setPage={setPage} currentPage={page} />
-      <AtmosphericBackground strength={0.1} driftSpeed={0.15} />
-
+      {/* <AtmosphericBackground strength={0.1} driftSpeed={0.15} /> */}
+      <ShaderBackground style={{ zIndex: 0 }} />
       <main key={page} style={{ position: 'relative', zIndex: 5, animation: 'fadeInUp 0.5s ease-out forwards' }}>
         {renderContent()}
       </main>

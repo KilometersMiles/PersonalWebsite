@@ -9,12 +9,15 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist -r https://github.com/KilometersMiles/PersonalWebsite.git"  
+    "deploy": "gh-pages -d dist -r https://github.com/KilometersMiles/PersonalWebsite.git"
   },
   "homepage": "https://KilometersMiles.github.io/PersonalWebsite",
   "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
     "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+    "react-dom": "^19.2.6",
+    "three": "^0.185.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
