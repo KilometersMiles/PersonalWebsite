@@ -296,7 +296,7 @@ const ShaderScene = ({ shape = 'none', textureUrl = null, radius = 0.25, softnes
     );
 };
 
-const ShaderBackground = ({ 
+const CloudBackground = ({ 
     shape = 'line', // 'none' | 'circle' | 'ring' | 'line' | 'texture'
     textureUrl = '/assets/image.png', // Path to PNG logo (e.g. '/logo.png')
     radius = .25,      // Size of shape
@@ -334,4 +334,4 @@ const ShaderBackground = ({
     );
 };
 
-export default ShaderBackground;
+export default CloudBackground;
