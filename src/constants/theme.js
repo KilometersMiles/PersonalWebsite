@@ -3,7 +3,7 @@ export const theme = {
   primary: '#38bdf8',
   secondary: '#ffffff',
   text: '#f8fafc',
-  subtext: '#94a3b8',
-  glass: 'rgba(255, 255, 255, 0.03)',
+  subtext: '#b0b9c4',
+  glass: 'rgba(255, 255, 255, 0.05)',
   glassBorder: 'rgba(255, 255, 255, 0.1)',
 };

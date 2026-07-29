@@ -133,9 +133,10 @@ const ShaderScene = () => {
     );
 }
 
-const LightBackground = ({style, ...props}) => {
+const LightBackground = ({ style, ...props }) => {
     return (
         <Canvas
+            // gl={{ preserveDrawingBuffer: true }}
             style={{
                 width: '100vw',
                 height: '100vh',

@@ -12,7 +12,8 @@ export default function Skills() {
     background: theme.glass,
     border: `1px solid ${hoveredCard === index ? theme.primary : theme.glassBorder}`,
     borderLeft: `${hoveredCard === index ? '8px' : '4px'} solid ${theme.primary}`,
-    backdropFilter: 'blur(10px)',
+    backdropFilter: 'blur(16px)',
+    WebkitBackdropFilter: 'blur(16px)',
     transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
     transform: hoveredCard === index ? 'translateX(5px)' : 'translateX(0)',
     boxShadow: hoveredCard === index ? `0 10px 30px -10px ${theme.primary}44` : 'none',
@@ -29,7 +30,7 @@ export default function Skills() {
       margin: '0 auto',
       padding: '2rem',
     }}>
-      <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1.5rem', color: theme.primary }}>SKILLS</h2>
+      <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1.5rem', color: theme.primary, filter: 'drop-shadow(8px 8px 10px rgba(0, 0, 0, 0.5))' }}>SKILLS</h2>
       <div style={{ textAlign: 'left', fontSize: '1.2rem', color: theme.text, display: 'flex', flexDirection: 'column', alignItems: 'left', gap: '2rem', padding: '4vh 0 20vh 0' }}>
         <div style={cardStyle(0)} onMouseEnter={() => setHoveredCard(0)}
           onMouseLeave={() => setHoveredCard(null)}

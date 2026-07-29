@@ -32,7 +32,7 @@ export default function Projects() {
       padding: '1rem',
       maxWidth: '1200px'
     }}>
-      <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1.5rem', color: theme.primary }}>PROJECTS</h2>
+      <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1.5rem', color: theme.primary, filter: 'drop-shadow(8px 8px 10px rgba(0, 0, 0, 0.5))' }}>PROJECTS</h2>
       <div style={{
         display: 'flex',
         flexDirection: 'row',

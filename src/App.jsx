@@ -34,17 +34,27 @@ export default function App() {
 
   return (
     <div style={{ backgroundColor: theme.bg, color: theme.text, minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
+      <LightBackground style={{ zIndex: 0 }} />
+      {/* <AtmosphericBackground strength={0.1} driftSpeed={0.15} zIndex={1} /> */}
+
       {/* Background Glow */}
-      <div style={{
-        position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 1,
+      {/* <div style={{
+        position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 2,
         background: `radial-gradient(400px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(133, 218, 255, 0.12), transparent 80%)`
-      }} />
+      }} /> */}
 
       <NavBar setPage={setPage} currentPage={page} />
-      <AtmosphericBackground strength={0.1} driftSpeed={0.15} />
       {/* <CloudBackground style={{ zIndex: 0 }} /> */}
-      <LightBackground style={{ zIndex: 0 }} />
-      <main key={page} style={{ position: 'relative', zIndex: 5, animation: 'fadeInUp 0.5s ease-out forwards' }}>
+      <main key={page}
+        onAnimationEnd={(e) => {
+          e.currentTarget.style.animation = 'none';
+        }}
+        style={{
+          position: 'relative',
+          zIndex: 5,
+          animation: 'fadeInUp 0.5s ease-out forwards'
+        }}
+        >
         {renderContent()}
       </main>
     </div>

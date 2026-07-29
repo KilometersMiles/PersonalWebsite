@@ -10,7 +10,7 @@ export default function About() {
       margin: '0 auto',
       padding: '2rem',
     }}>
-      <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1.5rem', color: theme.primary}}>ABOUT</h2>
+      <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1.5rem', color: theme.primary, filter: 'drop-shadow(8px 8px 10px rgba(0, 0, 0, 0.5))'}}>ABOUT</h2>
       <p style={{ color: theme.subtext, lineHeight: '1.8', fontSize: '1.1rem' }}>
         I am a cellist in Salt Lake City, Utah. I am also a member of the FTC Robotics Team 17230 Aluminum Falcons. 
       </p>
