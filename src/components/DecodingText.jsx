@@ -1,27 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { theme } from '../constants/theme';
 
 export default function DecodingText({ text }) {
+  const [displayedText, setDisplayedText] = useState('');
   const [phase, setPhase] = useState('typing');
-  const duration = Math.max(0.6, text.length * 0.1);
+
+  useEffect(() => {
+    setDisplayedText('');
+    setPhase('typing');
+  }, [text]);
+
+  useEffect(() => {
+    let timeout;
+    
+    if (phase === 'typing') {
+      if (displayedText.length < text.length) {
+        const totalDuration = Math.max(0.6, text.length * 0.1);
+        const timePerChar = (totalDuration * 1000) / text.length;
+
+        timeout = setTimeout(() => {
+          setDisplayedText(text.slice(0, displayedText.length + 1));
+        }, timePerChar);
+      } else {
+        setPhase('blinking');
+        timeout = setTimeout(() => setPhase('done'), 1200);
+      }
+    }
+    
+    return () => clearTimeout(timeout);
+  }, [displayedText, phase, text]);
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block', '--char-count': text.length }}>
-      <span style={{ opacity: phase === 'typing' ? 0.8 : 1, color: theme.subtext }}>{text}</span>
-      <div
-        onAnimationEnd={() => {
-          setPhase('blinking');
-          setTimeout(() => setPhase('done'), 1200);
-        }}
+    <div style={{ position: 'relative', display: 'inline-block' }}>
+      <span style={{ opacity: phase === 'typing' ? 0.8 : 1, color: theme.subtext }}>
+        {displayedText}
+      </span>
+      
+      <span
         style={{
-          position: 'absolute',
-          inset: 0,
-          background: theme.bg,
-          left: phase === 'typing' ? '0%' : '100%',
-          animation: phase === 'typing' ? `revealSteps ${duration}s steps(var(--char-count)) forwards` : phase === 'blinking' ? 'cursorBlink 0.8s steps(1) 3' : 'none',
           borderLeft: phase === 'done' ? 'none' : `2px solid ${theme.primary}`,
+          animation: phase === 'blinking' ? 'cursorBlink 0.8s steps(1) 3' : 'none',
+          marginLeft: '2px', // Slight gap between text and cursor
         }}
-      />
+      >
+        &#8203;
+      </span>
     </div>
   );
 }
