@@ -10,15 +10,38 @@ const hexToVec3 = (hex) => {
 };
 
 const pillarState = (index) => {
+    if (index == null) { index = 0; }
     if (index === 0) {
         return {
             uAngle: (Math.PI / 2 + Math.PI / 3),
             uWidth: .25,
+            uSpeed: 0.4,
+            uDensity: 20.0,
+            uColorMix: 0.0,
         }
     } else if (index === 1) {
         return {
             uAngle: (Math.PI / 2 + Math.PI / 4),
             uWidth: .6,
+            uSpeed: 0.8,
+            uDensity: 35.0,
+            uColorMix: 0.2,
+        }
+    } else if (index === 2) {
+        return {
+            uAngle: Math.PI / 4,
+            uWidth: 0.35,
+            uSpeed: 0.15,
+            uDensity: 50.0,
+            uColorMix: 0.4,
+        }
+    } else if (index === 3) {
+        return {
+            uAngle: Math.PI / 6,
+            uWidth: 0.8,
+            uSpeed: 0.1,
+            uDensity: 10.0,
+            uColorMix: .6,
         }
     }
 }
@@ -33,6 +56,9 @@ const LightPillarMaterial = shaderMaterial(
         uBg: hexToVec3(theme.bg),
         uAngle: (Math.PI / 2 + Math.PI / 3),
         uWidth: .25,
+        uSpeed: 0.4,
+        uDensity: 20.0,
+        uColorMix: 0.0,
     },
     `
     varying vec2 vUv;
@@ -50,6 +76,9 @@ const LightPillarMaterial = shaderMaterial(
     uniform vec3 uBg;
     uniform float uAngle;
     uniform float uWidth;
+    uniform float uSpeed;
+    uniform float uDensity;
+    uniform float uColorMix;
     varying vec2 vUv;
 
     // 2D Random
@@ -100,10 +129,10 @@ vec2 st = (gl_FragCoord.xy - 0.5 * u_resolution.xy) / u_resolution.y;
         float s = sin(uAngle);
         vec2 localSt = vec2(c * st.x - s * st.y, s * st.x + c * st.y);
 
-        float warp = fbm(vec2(localSt.x * 4.0 + uTime * 0.4, localSt.y * 2.0 - uTime * 0.1)) * 0.15;
+        float warp = fbm(vec2(localSt.x * 4.0 + uTime * uSpeed, localSt.y * 2.0 - uTime * (0.25 * uSpeed))) * 0.15;
         float warpedX = localSt.x + warp;
 
-        vec2 noiseCoord = vec2(warpedX * 20.0, localSt.y * 2.0 - uTime * 0.2);
+        vec2 noiseCoord = vec2(warpedX * uDensity, localSt.y * 2.0 - uTime * (0.5 * uSpeed));
         float n = fbm(noiseCoord);
         
         float strands = pow(n, 2.24);
@@ -118,9 +147,10 @@ vec2 st = (gl_FragCoord.xy - 0.5 * u_resolution.xy) / u_resolution.y;
 
         vec3 pct = vec3(st.y);
         vec3 mixColor = mix(uPrimary, uSecondary, pct);
-        vec3 color = mix(uBg, mixColor, clamp(finalIntensity, 0.0, 1.0));
+        vec3 tint = mix(mixColor, uSecondary, uColorMix);
         
-        color += vec3(0.9, 0.95, 1.0) * smoothstep(uWidth * 0.3, 0.0, distFromCenter) * strands * 0.8;
+        vec3 color = mix(uBg, tint, clamp(finalIntensity, 0.0, 1.0));
+        color += vec3(0.9, 0.95, 1.0) * smoothstep(uWidth * 0.3, 0.0, distFromCenter) * strands * 0.6;
 
         //apply some noise on top 
         vec2 posi = vec2(st*700.0);
@@ -137,7 +167,7 @@ const ShaderScene = ({ index }) => {
     const materialRef = useRef();
 
     const currentConfig = pillarState(index);
-    
+
     useFrame((state) => {
         if (!materialRef.current) return;
         materialRef.current.uTime = state.clock.getElapsedTime();
@@ -145,6 +175,9 @@ const ShaderScene = ({ index }) => {
 
         materialRef.current.uAngle = THREE.MathUtils.lerp(materialRef.current.uAngle, currentConfig.uAngle, 0.05);
         materialRef.current.uWidth = THREE.MathUtils.lerp(materialRef.current.uWidth, currentConfig.uWidth, 0.05);
+        materialRef.current.uSpeed = THREE.MathUtils.lerp(materialRef.current.uSpeed, currentConfig.uSpeed, 0.0);
+        materialRef.current.uDensity = THREE.MathUtils.lerp(materialRef.current.uDensity, currentConfig.uDensity, 0.05);
+        materialRef.current.uColorMix = THREE.MathUtils.lerp(materialRef.current.uColorMix, currentConfig.uColorMix, 0.05);
     });
     return (
         <Plane args={[2, 2]} position={[0, 0, 0]}>
