@@ -9,6 +9,20 @@ const hexToVec3 = (hex) => {
     return new THREE.Vector3(c.r, c.g, c.b);
 };
 
+const pillarState = (index) => {
+    if (index === 0) {
+        return {
+            uAngle: (Math.PI / 2 + Math.PI / 3),
+            uWidth: .25,
+        }
+    } else if (index === 1) {
+        return {
+            uAngle: (Math.PI / 2 + Math.PI / 4),
+            uWidth: .6,
+        }
+    }
+}
+
 const LightPillarMaterial = shaderMaterial(
     {
         uTime: 0,
@@ -18,7 +32,7 @@ const LightPillarMaterial = shaderMaterial(
         uSeed: Math.random() * 1000,
         uBg: hexToVec3(theme.bg),
         uAngle: (Math.PI / 2 + Math.PI / 3),
-        uWidth: .2,
+        uWidth: .25,
     },
     `
     varying vec2 vUv;
@@ -119,12 +133,18 @@ vec2 st = (gl_FragCoord.xy - 0.5 * u_resolution.xy) / u_resolution.y;
 
 extend({ LightPillarMaterial });
 
-const ShaderScene = () => {
+const ShaderScene = ({ index }) => {
     const materialRef = useRef();
+
+    const currentConfig = pillarState(index);
+    
     useFrame((state) => {
         if (!materialRef.current) return;
         materialRef.current.uTime = state.clock.getElapsedTime();
         materialRef.current.u_resolution.set(window.innerWidth, window.innerHeight);
+
+        materialRef.current.uAngle = THREE.MathUtils.lerp(materialRef.current.uAngle, currentConfig.uAngle, 0.05);
+        materialRef.current.uWidth = THREE.MathUtils.lerp(materialRef.current.uWidth, currentConfig.uWidth, 0.05);
     });
     return (
         <Plane args={[2, 2]} position={[0, 0, 0]}>
@@ -133,7 +153,7 @@ const ShaderScene = () => {
     );
 }
 
-const LightBackground = ({ style, ...props }) => {
+const LightBackground = ({ pageIndex, style, ...props }) => {
     return (
         <Canvas
             // gl={{ preserveDrawingBuffer: true }}
@@ -152,7 +172,7 @@ const LightBackground = ({ style, ...props }) => {
             {...props}
         >
             <React.Suspense fallback={null}>
-                <ShaderScene />
+                <ShaderScene index={pageIndex} />
             </React.Suspense>
         </Canvas>
     );

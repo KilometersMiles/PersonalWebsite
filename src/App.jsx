@@ -34,10 +34,10 @@ export default function App() {
 
   return (
     <div style={{ backgroundColor: theme.bg, color: theme.text, minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
-      <LightBackground style={{ zIndex: 0 }} />
+      <LightBackground pageIndex={page === 'home' ? 0 : page === 'projects' ? 1 : page === 'skills' ? 2 : 3} style={{ zIndex: 0 }} />
       <AtmosphericBackground strength={0.1} driftSpeed={0.15} zIndex={1} />
 
-      {/* Background Glow */}
+      {/* Mouse Glow */}
       <div style={{
         position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 2,
         background: `radial-gradient(400px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(133, 218, 255, 0.12), transparent 80%)`
