@@ -4,8 +4,8 @@ Hi! This is my website! It has some projects I'm working on, skills, about me, a
 
 ## How to access 
 Click this link. Simple
-https://kilometersmiles.github.io/PersonalWebsite/
-
+[mileshigginson.com
+](https://mileshigginson.com/)
 ## Features
 This site has
 * Adaptive light pillar shader
