@@ -23,11 +23,13 @@ export default function DecodingText({ text }) {
         }, timePerChar);
       } else {
         setPhase('blinking');
-        timeout = setTimeout(() => setPhase('done'), 1200);
+        setTimeout(() => {
+          setPhase('done');
+        }, 1200);
       }
     }
     
-    return () => clearTimeout(timeout);
+    return;
   }, [displayedText, phase, text]);
 
   return (
@@ -40,7 +42,7 @@ export default function DecodingText({ text }) {
         style={{
           borderLeft: phase === 'done' ? 'none' : `2px solid ${theme.primary}`,
           animation: phase === 'blinking' ? 'cursorBlink 0.8s steps(1) 3' : 'none',
-          marginLeft: '2px', // Slight gap between text and cursor
+          marginLeft: '2px',
         }}
       >
         &#8203;
