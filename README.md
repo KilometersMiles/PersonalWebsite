@@ -8,6 +8,7 @@ https://kilometersmiles.github.io/PersonalWebsite/
 
 ## Features
 This site has
+* Adaptive light pillar shader
 * Interactive background atmoshpere
 * Electric & Magnetic buttons
 * Self-typing text
