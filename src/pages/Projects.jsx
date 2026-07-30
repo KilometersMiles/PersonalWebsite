@@ -6,8 +6,14 @@ import { theme } from '../constants/theme';
 const projects = [
   {
     title: 'FTC Path Follower',
-    desc: 'A unique path follower for FTC robots, using LQR control to quickly and accurately follow trajectories. Visualizer and optimizer in progress.',
-    url: '/assets/VisualizerScreenshot.png',
+    desc: 'A unique path follower for FTC robots, using LQR control to quickly and accurately follow trajectories.',
+    url: '/assets/RobotPhoto.png',
+    type: 'image'
+  },
+  {
+    title: 'FTC Lightspeed',
+    desc: 'Generates time optimal trajectories for FTC robots. Includes tools for trajectory creation and visualization.',
+    url: '/assets/LightspeedScreenshot.png',
     type: 'image'
   },
   {
@@ -22,6 +28,12 @@ const projects = [
     url: '/assets/AluminumScreenshot.png',
     type: 'image'
   },
+  {
+    title: 'Rocket Test Stand',
+    desc: 'A custom-built test stand for measuring small rocket motor performance.',
+    url: '/assets/RocketTestStand.png',
+    type: 'image'
+  }
 ];
 
 export default function Projects() {

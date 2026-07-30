@@ -29,15 +29,15 @@ const pillarState = (index) => {
         }
     } else if (index === 2) {
         return {
-            uAngle: Math.PI / 4,
+            uAngle: (Math.PI / 2 + Math.PI / 6),
             uWidth: 0.35,
             uSpeed: 0.15,
-            uDensity: 50.0,
+            uDensity: 100.0,
             uColorMix: 0.4,
         }
     } else if (index === 3) {
         return {
-            uAngle: Math.PI / 6,
+            uAngle: (Math.PI / 2 + Math.PI / 2),
             uWidth: 0.8,
             uSpeed: 0.1,
             uDensity: 10.0,
