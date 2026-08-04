@@ -1,5 +1,5 @@
 # Miles Higginson - Personal Website
-
+[!Screenshot](./public/assets/PortfolioScreenshot.png)
 Hi! This is my website! It has some projects I'm working on, skills, about me, and contact info, along with cool effects to keep it viusally interesting.
 
 ## How to access 
