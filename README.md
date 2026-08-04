@@ -17,5 +17,11 @@ This site has
 
 Built with react
 
+## Local Setup
+1. Clone GitHub repo using link above.
+2. npm install —legacy-peer-deps
+3. npm run dev
+4. Develop!
+
 ## Licence
 This project is licensed under the MIT License
